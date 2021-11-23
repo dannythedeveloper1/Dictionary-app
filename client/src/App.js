@@ -1,4 +1,3 @@
-import { dictionary } from './utils/utils';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -8,7 +7,10 @@ function App() {
   useEffect(() => {
     (() => {
       axios.get(`/api/${searchTerm}`)
-        .then(res => console.log(res))
+        .then(res => {
+          console.log(res)
+          setData(res.data);
+        })
         .catch(error => console.log(error))
     })();
 
