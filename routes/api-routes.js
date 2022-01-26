@@ -13,6 +13,18 @@ const dictionary = (word) => {
     );
 }
 
+const numberConverter = (number) => {
+    // console.log(number);
+    return (
+        axios.get(`https://api.math.tools/numbers/cardinal?number=${number}`)
+            .then(res => {
+                // console.log(res);
+                return res.data.contents
+            })
+        .catch(err=>console.error(err))
+    );
+}
+
 
 // const dictionary = (word) => {
 //     return new Promise(async (resolve, reject) => {
@@ -33,6 +45,15 @@ router.get("/api/:searchTerm", async (req, res) => {
         // res.json('hello world');
         console.log('backend');
         res.json(await dictionary(req.params.searchTerm));
+    } catch (err) {
+        res.json(err);
+    }
+});
+
+router.get("/api/num/:number", async (req, res) => {
+    try {
+        console.log("number");
+        res.json(await numberConverter(req.params.number));
     } catch (err) {
         res.json(err);
     }
