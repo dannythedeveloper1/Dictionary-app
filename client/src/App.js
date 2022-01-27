@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Register from './components/Registration/Register';
 
 function App() {
   const [data, setData] = useState([]);
@@ -31,6 +32,7 @@ function App() {
   return (
     <div>
       <h1>hello</h1>
+      <Register/>
     </div>
   );
 }

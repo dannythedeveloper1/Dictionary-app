@@ -59,4 +59,9 @@ router.get("/api/num/:number", async (req, res) => {
     }
 });
 
+router.post('/api/register', (req, res) => {
+    console.log(req.body);
+    res.json({status:'ok'})
+})
+
 module.exports = router;
