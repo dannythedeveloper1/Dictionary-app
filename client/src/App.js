@@ -8,7 +8,7 @@ function App() {
   const [number, setNumber] = useState(15);
   useEffect(() => {
     (() => {
-      axios.get(`/api/${searchTerm}`)
+      axios.get(`/api/dictionary/${searchTerm}`)
         .then(res => {
           console.log(res)
           setData(res.data);

@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const User = require('../models/user.model')
 require('dotenv').config();
 const axios = require('axios');
 const apiKey = process.env.DIC_API_KEY;
@@ -21,7 +22,7 @@ const numberConverter = (number) => {
                 // console.log(res);
                 return res.data.contents
             })
-        .catch(err=>console.error(err))
+            .catch(err => console.error(err))
     );
 }
 
@@ -40,10 +41,10 @@ const numberConverter = (number) => {
 //     });
 // };
 
-router.get("/api/:searchTerm", async (req, res) => {
+router.get("/api/dictionary/:searchTerm", async (req, res) => {
     try {
         // res.json('hello world');
-        console.log('backend');
+        console.log('dictionary');
         res.json(await dictionary(req.params.searchTerm));
     } catch (err) {
         res.json(err);
@@ -59,9 +60,18 @@ router.get("/api/num/:number", async (req, res) => {
     }
 });
 
-router.post('/api/register', (req, res) => {
+router.post('/api/register', async (req, res) => {
     console.log(req.body);
-    res.json({status:'ok'})
+    try {
+        await User.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+        })
+        res.json({ status: 'ok' })
+    } catch {
+        res.json({ status: 'error', error: 'Duplicate email' })
+    }
 })
 
 module.exports = router;
