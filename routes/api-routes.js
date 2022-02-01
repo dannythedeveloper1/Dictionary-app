@@ -68,10 +68,20 @@ router.post('/api/register', async (req, res) => {
             email: req.body.email,
             password: req.body.password,
         })
-        res.json({ status: 'ok' })
+
+        res.json({ status: "ok" })
     } catch {
         res.json({ status: 'error', error: 'Duplicate email' })
     }
+})
+
+router.post('/api/login', async (req, res) => {
+    const user = await User.findOne({
+        email: req.body.email,
+        password: req.body.password,
+    })
+    user ? res.json({ status: 'ok', user: true }) :
+        res.json({ status: 'error', user: false })
 })
 
 module.exports = router;

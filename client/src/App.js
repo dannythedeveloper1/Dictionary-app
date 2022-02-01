@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Register from './components/Registration/Register';
+import Login from './components/Login/Login';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   const [data, setData] = useState([]);
@@ -21,7 +23,7 @@ function App() {
     (() => {
       axios.get(`/api/num/${number}`)
         .then(res => {
-          console.log("hi",number);
+          console.log("hi", number);
           console.log(res)
           // setData(res.data);
         })
@@ -32,7 +34,12 @@ function App() {
   return (
     <div>
       <h1>hello</h1>
-      <Register/>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
