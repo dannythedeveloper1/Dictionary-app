@@ -3,6 +3,7 @@ const User = require('../models/user.model')
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const axios = require('axios');
+const bcrypt=require('bcryptjs')
 const apiKey = process.env.DIC_API_KEY;
 
 const dictionary = (word) => {
@@ -64,10 +65,11 @@ router.get("/api/num/:number", async (req, res) => {
 router.post('/api/register', async (req, res) => {
     console.log(req.body);
     try {
+        const newPassword = await bcrypt.hash(req.body.password, 10);
         await User.create({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            password: newPassword,
         })
 
         res.json({ status: "ok" })
@@ -79,10 +81,15 @@ router.post('/api/register', async (req, res) => {
 router.post('/api/login', async (req, res) => {
     const user = await User.findOne({
         email: req.body.email,
-        password: req.body.password,
     })
 
-    if (user) {
+    if (!user) {
+        return { status: 'error', error: "Invalid login" };
+    }
+
+    const isPasswordValid = await bcrypt.compare(req.body.password,user.password)
+
+    if (isPasswordValid) {
         const token = jwt.sign({
             name: user.name,
             email: user.email
@@ -116,7 +123,7 @@ router.post('/api/quote', async (req, res) => {
             { email: email },
             { $set: { quote: req.body.quote } }
         )
-        return { status: 'ok' }
+        return res.json({ status: 'ok' })
     } catch (error) {
         console.log(error);
         res.json({ status: 'error', error: 'invalid token' })
