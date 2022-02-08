@@ -16,7 +16,13 @@ const Login = () => {
             }),
         });
         const data = await response.json();
-        console.log(data);
+        if (data.user) {
+            localStorage.setItem('token',data.user)
+            alert('login successful');
+            window.location.href = '/dashboard';
+        } else {
+            alert('please check your username and password');
+        }
     };
     return (
         <div>
@@ -36,7 +42,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <br />
-                <button type="submit">Register</button>
+                <button type="submit">Login</button>
             </form>
         </div>
     );
